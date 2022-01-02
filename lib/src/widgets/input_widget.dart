@@ -45,9 +45,13 @@ typedef CountryTileBuilder = Widget Function({
   VoidCallback onTap,
 });
 
-/// [CountriesListSeparatorBuilder] and returns a widget that is used as
+/// [CountriesListSeparatorBuilder] returns a widget that is used as
 /// countries list separator.
 typedef CountriesListSeparatorBuilder = Widget Function();
+
+/// [HeaderBuilder] takes countries list search box and returns a widget
+/// that is used as countries list header.
+typedef CountriesListHeaderBuilder = Widget Function({TextFormField searchBox});
 
 /// A [TextFormField] for [InternationalPhoneNumberInput].
 ///
@@ -104,6 +108,7 @@ class InternationalPhoneNumberInput extends StatefulWidget {
   final InputDecoration? searchBoxDecoration;
   final CountryTileBuilder? countryTileBuilder;
   final CountriesListSeparatorBuilder? countriesListSeparatorBuilder;
+  final CountriesListHeaderBuilder? countriesListHeaderBuilder;
   final Color? cursorColor;
   final TextAlign textAlign;
   final TextAlignVertical textAlignVertical;
@@ -147,6 +152,7 @@ class InternationalPhoneNumberInput extends StatefulWidget {
       this.searchBoxDecoration,
       this.countryTileBuilder,
       this.countriesListSeparatorBuilder,
+      this.countriesListHeaderBuilder,
       this.textAlign = TextAlign.start,
       this.textAlignVertical = TextAlignVertical.center,
       this.scrollPadding = const EdgeInsets.all(20.0),
@@ -330,6 +336,7 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
         searchBoxDecoration: widget.searchBoxDecoration,
         countryTileBuilder: widget.countryTileBuilder,
         countriesListSeparatorBuilder: widget.countriesListSeparatorBuilder,
+        countriesListHeaderBuilder: widget.countriesListHeaderBuilder,
         locale: locale,
         isEnabled: widget.isEnabled,
         autoFocusSearchField: widget.autoFocusSearch,
@@ -440,6 +447,7 @@ class _InputWidgetView
                   countryTileBuilder: widget.countryTileBuilder,
                   countriesListSeparatorBuilder:
                       widget.countriesListSeparatorBuilder,
+                  countriesListHeaderBuilder: widget.countriesListHeaderBuilder,
                   locale: state.locale,
                   isEnabled: widget.isEnabled,
                   autoFocusSearchField: widget.autoFocusSearch,

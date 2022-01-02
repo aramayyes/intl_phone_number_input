@@ -10,6 +10,7 @@ class CountrySearchListWidget extends StatefulWidget {
   final InputDecoration? searchBoxDecoration;
   final CountryTileBuilder? countryTileBuilder;
   final CountriesListSeparatorBuilder? countriesListSeparatorBuilder;
+  final CountriesListHeaderBuilder? countriesListHeaderBuilder;
   final String? locale;
   final ScrollController? scrollController;
   final bool autoFocus;
@@ -22,6 +23,7 @@ class CountrySearchListWidget extends StatefulWidget {
     this.searchBoxDecoration,
     this.countryTileBuilder,
     this.countriesListSeparatorBuilder,
+    this.countriesListHeaderBuilder,
     this.scrollController,
     this.showFlags,
     this.useEmoji,
@@ -62,28 +64,33 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final searchBox = TextFormField(
+      key: Key(TestHelper.CountrySearchInputKeyValue),
+      decoration: getSearchBoxDecoration(),
+      controller: _searchController,
+      autofocus: widget.autoFocus,
+      onChanged: (value) {
+        final String value = _searchController.text.trim();
+        return setState(
+          () => filteredCountries = Utils.filterCountries(
+            countries: widget.countries,
+            locale: widget.locale,
+            value: value,
+          ),
+        );
+      },
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextFormField(
-            key: Key(TestHelper.CountrySearchInputKeyValue),
-            decoration: getSearchBoxDecoration(),
-            controller: _searchController,
-            autofocus: widget.autoFocus,
-            onChanged: (value) {
-              final String value = _searchController.text.trim();
-              return setState(
-                () => filteredCountries = Utils.filterCountries(
-                  countries: widget.countries,
-                  locale: widget.locale,
-                  value: value,
-                ),
-              );
-            },
-          ),
-        ),
+        widget.countriesListHeaderBuilder != null
+            ? widget.countriesListHeaderBuilder!(searchBox: searchBox)
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: searchBox,
+              ),
         Flexible(
           child: widget.countriesListSeparatorBuilder != null
               ? ListView.separated(

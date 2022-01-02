@@ -15,6 +15,7 @@ class SelectorButton extends StatelessWidget {
   final InputDecoration? searchBoxDecoration;
   final CountryTileBuilder? countryTileBuilder;
   final CountriesListSeparatorBuilder? countriesListSeparatorBuilder;
+  final CountriesListHeaderBuilder? countriesListHeaderBuilder;
   final bool autoFocusSearchField;
   final String? locale;
   final bool isEnabled;
@@ -31,6 +32,7 @@ class SelectorButton extends StatelessWidget {
     required this.searchBoxDecoration,
     required this.countryTileBuilder,
     required this.countriesListSeparatorBuilder,
+    required this.countriesListHeaderBuilder,
     required this.autoFocusSearchField,
     required this.locale,
     required this.onCountryChanged,
@@ -137,6 +139,7 @@ class SelectorButton extends StatelessWidget {
               searchBoxDecoration: searchBoxDecoration,
               countryTileBuilder: countryTileBuilder,
               countriesListSeparatorBuilder: countriesListSeparatorBuilder,
+              countriesListHeaderBuilder: countriesListHeaderBuilder,
               showFlags: selectorConfig.showFlags,
               useEmoji: selectorConfig.useEmoji,
               autoFocus: autoFocusSearchField,
@@ -184,6 +187,7 @@ class SelectorButton extends StatelessWidget {
                     countryTileBuilder: countryTileBuilder,
                     countriesListSeparatorBuilder:
                         countriesListSeparatorBuilder,
+                    countriesListHeaderBuilder: countriesListHeaderBuilder,
                     scrollController: controller,
                     showFlags: selectorConfig.showFlags,
                     useEmoji: selectorConfig.useEmoji,
