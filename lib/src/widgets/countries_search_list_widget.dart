@@ -118,7 +118,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
 
     if (widget.countryTileBuilder != null) {
       return widget.countryTileBuilder!(
-        key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
+        tileKey: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
         countryName: '${Utils.getCountryName(country, widget.locale)}',
         flag: (widget.showFlags!
             ? _Flag(country: country, useEmoji: widget.useEmoji!)

@@ -25,7 +25,8 @@ enum PhoneInputSelectorType { DROPDOWN, BOTTOM_SHEET, DIALOG }
 /// [CountryTileBuilder] takes country name and configs and returns a widget
 /// that is used as countries list tile.
 ///
-/// [key] is a [Key] that should be used to identify tiles in countries list
+/// [tileKey] is a [Key] that should be used to identify the list tile
+/// in countries list
 ///
 /// [countryName] is a string that identifies the corresponding country name
 /// for the list tile
@@ -38,11 +39,11 @@ enum PhoneInputSelectorType { DROPDOWN, BOTTOM_SHEET, DIALOG }
 ///
 /// [onTap] is a [VoidCallback] that is called when the list tile is tapped
 typedef CountryTileBuilder = Widget Function({
-  required Key key,
+  required Key tileKey,
   required String countryName,
   Widget? flag,
   String? dialCode,
-  VoidCallback onTap,
+  required VoidCallback onTap,
 });
 
 /// [CountriesListSeparatorBuilder] returns a widget that is used as
@@ -51,7 +52,9 @@ typedef CountriesListSeparatorBuilder = Widget Function();
 
 /// [HeaderBuilder] takes countries list search box and returns a widget
 /// that is used as countries list header.
-typedef CountriesListHeaderBuilder = Widget Function({TextFormField searchBox});
+typedef CountriesListHeaderBuilder = Widget Function({
+  required TextFormField searchBox,
+});
 
 /// A [TextFormField] for [InternationalPhoneNumberInput].
 ///
