@@ -22,6 +22,33 @@ import 'package:intl_phone_number_input/src/widgets/selector_button.dart';
 ///   * [PhoneInputSelectorType.DIALOG]
 enum PhoneInputSelectorType { DROPDOWN, BOTTOM_SHEET, DIALOG }
 
+/// [CountryTileBuilder] takes country name and configs and returns a widget
+/// that is used as countries list tile.
+///
+/// [key] is a [Key] that should be used to identify tiles in countries list
+///
+/// [countryName] is a string that identifies the corresponding country name
+/// for the list tile
+///
+/// [flag] is a [Widget] that represents the corresponding country flag
+/// for the list tile. [null] if [selectorConfig.showFlags = false]
+///
+/// [dialCode] is a string that identifies the corresponding country dial code
+/// for the list tile
+///
+/// [onTap] is a [VoidCallback] that is called when the list tile is tapped
+typedef CountryTileBuilder = Widget Function({
+  required Key key,
+  required String countryName,
+  Widget? flag,
+  String? dialCode,
+  VoidCallback onTap,
+});
+
+/// [CountriesListSeparatorBuilder] and returns a widget that is used as
+/// countries list separator.
+typedef CountriesListSeparatorBuilder = Widget Function();
+
 /// A [TextFormField] for [InternationalPhoneNumberInput].
 ///
 /// [initialValue] accepts a [PhoneNumber] this is used to set initial values
@@ -75,6 +102,8 @@ class InternationalPhoneNumberInput extends StatefulWidget {
   final InputBorder? inputBorder;
   final InputDecoration? inputDecoration;
   final InputDecoration? searchBoxDecoration;
+  final CountryTileBuilder? countryTileBuilder;
+  final CountriesListSeparatorBuilder? countriesListSeparatorBuilder;
   final Color? cursorColor;
   final TextAlign textAlign;
   final TextAlignVertical textAlignVertical;
@@ -116,6 +145,8 @@ class InternationalPhoneNumberInput extends StatefulWidget {
       this.inputBorder,
       this.inputDecoration,
       this.searchBoxDecoration,
+      this.countryTileBuilder,
+      this.countriesListSeparatorBuilder,
       this.textAlign = TextAlign.start,
       this.textAlignVertical = TextAlignVertical.center,
       this.scrollPadding = const EdgeInsets.all(20.0),
@@ -297,6 +328,8 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
         selectorConfig: widget.selectorConfig,
         selectorTextStyle: widget.selectorTextStyle,
         searchBoxDecoration: widget.searchBoxDecoration,
+        countryTileBuilder: widget.countryTileBuilder,
+        countriesListSeparatorBuilder: widget.countriesListSeparatorBuilder,
         locale: locale,
         isEnabled: widget.isEnabled,
         autoFocusSearchField: widget.autoFocusSearch,
@@ -404,6 +437,9 @@ class _InputWidgetView
                   selectorConfig: widget.selectorConfig,
                   selectorTextStyle: widget.selectorTextStyle,
                   searchBoxDecoration: widget.searchBoxDecoration,
+                  countryTileBuilder: widget.countryTileBuilder,
+                  countriesListSeparatorBuilder:
+                      widget.countriesListSeparatorBuilder,
                   locale: state.locale,
                   isEnabled: widget.isEnabled,
                   autoFocusSearchField: widget.autoFocusSearch,

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/src/models/country_model.dart';
 import 'package:intl_phone_number_input/src/utils/test/test_helper.dart';
 import 'package:intl_phone_number_input/src/utils/util.dart';
+import 'package:intl_phone_number_input/src/widgets/input_widget.dart';
 
 /// Creates a list of Countries with a search textfield.
 class CountrySearchListWidget extends StatefulWidget {
   final List<Country> countries;
   final InputDecoration? searchBoxDecoration;
+  final CountryTileBuilder? countryTileBuilder;
+  final CountriesListSeparatorBuilder? countriesListSeparatorBuilder;
   final String? locale;
   final ScrollController? scrollController;
   final bool autoFocus;
@@ -17,6 +20,8 @@ class CountrySearchListWidget extends StatefulWidget {
     this.countries,
     this.locale, {
     this.searchBoxDecoration,
+    this.countryTileBuilder,
+    this.countriesListSeparatorBuilder,
     this.scrollController,
     this.showFlags,
     this.useEmoji,
@@ -80,47 +85,56 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
           ),
         ),
         Flexible(
-          child: ListView.builder(
-            controller: widget.scrollController,
-            shrinkWrap: true,
-            itemCount: filteredCountries.length,
-            itemBuilder: (BuildContext context, int index) {
-              Country country = filteredCountries[index];
-
-              return DirectionalCountryListTile(
-                country: country,
-                locale: widget.locale,
-                showFlags: widget.showFlags!,
-                useEmoji: widget.useEmoji!,
-              );
-              // return ListTile(
-              //   key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
-              //   leading: widget.showFlags!
-              //       ? _Flag(country: country, useEmoji: widget.useEmoji)
-              //       : null,
-              //   title: Align(
-              //     alignment: AlignmentDirectional.centerStart,
-              //     child: Text(
-              //       '${Utils.getCountryName(country, widget.locale)}',
-              //       textDirection: Directionality.of(context),
-              //       textAlign: TextAlign.start,
-              //     ),
-              //   ),
-              //   subtitle: Align(
-              //     alignment: AlignmentDirectional.centerStart,
-              //     child: Text(
-              //       '${country.dialCode ?? ''}',
-              //       textDirection: TextDirection.ltr,
-              //       textAlign: TextAlign.start,
-              //     ),
-              //   ),
-              //   onTap: () => Navigator.of(context).pop(country),
-              // );
-            },
-          ),
+          child: widget.countriesListSeparatorBuilder != null
+              ? ListView.separated(
+                  controller: widget.scrollController,
+                  shrinkWrap: true,
+                  itemCount: filteredCountries.length,
+                  itemBuilder: buildCountryListTile,
+                  separatorBuilder: (context, index) =>
+                      widget.countriesListSeparatorBuilder!(),
+                )
+              : ListView.builder(
+                  controller: widget.scrollController,
+                  shrinkWrap: true,
+                  itemCount: filteredCountries.length,
+                  itemBuilder: buildCountryListTile,
+                ),
         ),
       ],
     );
+  }
+
+  /// Builds a list tile with [index] for countries list.
+  Widget buildCountryListTile(BuildContext context, int index) {
+    Country country = filteredCountries[index];
+
+    if (widget.countryTileBuilder != null) {
+      return widget.countryTileBuilder!(
+        key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
+        countryName: '${Utils.getCountryName(country, widget.locale)}',
+        flag: (widget.showFlags!
+            ? _Flag(country: country, useEmoji: widget.useEmoji!)
+            : null),
+        dialCode: country.dialCode,
+        onTap: () => Navigator.of(context).pop(country),
+      );
+    }
+
+    return DirectionalCountryListTile(
+      country: country,
+      locale: widget.locale,
+      showFlags: widget.showFlags!,
+      useEmoji: widget.useEmoji!,
+    );
+  }
+
+  Widget buildCountryListSeparator(BuildContext context, int index) {
+    if (widget.countriesListSeparatorBuilder != null) {
+      return widget.countriesListSeparatorBuilder!();
+    } else {
+      return Container();
+    }
   }
 
   @override
