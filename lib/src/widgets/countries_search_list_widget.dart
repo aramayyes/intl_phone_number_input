@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl_phone_number_input/src/models/country_model.dart';
 import 'package:intl_phone_number_input/src/utils/test/test_helper.dart';
 import 'package:intl_phone_number_input/src/utils/util.dart';
@@ -13,6 +14,7 @@ class CountrySearchListWidget extends StatefulWidget {
   final CountriesListHeaderBuilder? countriesListHeaderBuilder;
   final String? locale;
   final ScrollController? scrollController;
+  final CountryComparator? countryComparator;
   final bool autoFocus;
   final bool? showFlags;
   final bool? useEmoji;
@@ -25,6 +27,7 @@ class CountrySearchListWidget extends StatefulWidget {
     this.countriesListSeparatorBuilder,
     this.countriesListHeaderBuilder,
     this.scrollController,
+    this.countryComparator,
     this.showFlags,
     this.useEmoji,
     this.autoFocus = false,
@@ -47,6 +50,8 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
       locale: widget.locale,
       value: value,
     );
+    sortCountries();
+
     super.initState();
   }
 
@@ -71,13 +76,15 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
       autofocus: widget.autoFocus,
       onChanged: (value) {
         final String value = _searchController.text.trim();
-        return setState(
-          () => filteredCountries = Utils.filterCountries(
+        return setState(() {
+          filteredCountries = Utils.filterCountries(
             countries: widget.countries,
             locale: widget.locale,
             value: value,
-          ),
-        );
+          );
+
+          sortCountries();
+        });
       },
     );
 
@@ -142,6 +149,34 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
     } else {
       return Container();
     }
+  }
+
+  void sortCountries() {
+    final value = _searchController.text.trim();
+    filteredCountries.sort(
+      (a, b) {
+        final aStartsWith = Utils.getCountryName(a, widget.locale)!
+            .toLowerCase()
+            .startsWith(value.toLowerCase());
+        final bStartsWith = Utils.getCountryName(b, widget.locale)!
+            .toLowerCase()
+            .startsWith(value.toLowerCase());
+        if (aStartsWith && !bStartsWith) {
+          return -1;
+        }
+
+        if (!aStartsWith && bStartsWith) {
+          return 1;
+        }
+
+        if (widget.countryComparator != null) {
+          return widget.countryComparator!(a, b);
+        }
+
+        return Utils.getCountryName(a, widget.locale)!
+            .compareTo(Utils.getCountryName(b, widget.locale)!);
+      },
+    );
   }
 
   @override
