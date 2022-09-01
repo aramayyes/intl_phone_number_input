@@ -49,27 +49,49 @@ class SelectorButton extends StatelessWidget {
             ? DropdownButtonHideUnderline(
                 child: DropdownButton<Country>(
                   key: Key(TestHelper.DropdownButtonKeyValue),
-                  hint: Item(
+                  hint: selectorConfig.customBuilder != null
+                      ? selectorConfig.customBuilder!(
+                          country: country,
+                          showFlag: selectorConfig.showFlags,
+                          useEmoji: selectorConfig.useEmoji,
+                          leadingPadding: selectorConfig.leadingPadding,
+                          trailingSpace: selectorConfig.trailingSpace,
+                          textStyle: selectorTextStyle,
+                          trailingIcon: trailingIcon,
+                        )
+                      : Item(
+                          country: country,
+                          showFlag: selectorConfig.showFlags,
+                          useEmoji: selectorConfig.useEmoji,
+                          leadingPadding: selectorConfig.leadingPadding,
+                          trailingSpace: selectorConfig.trailingSpace,
+                          textStyle: selectorTextStyle,
+                          trailingIcon: trailingIcon,
+                        ),
+                  value: country,
+                  items: mapCountryToDropdownItem(countries),
+                  onChanged: isEnabled ? onCountryChanged : null,
+                ),
+              )
+            : selectorConfig.customBuilder != null
+                ? selectorConfig.customBuilder!(
                     country: country,
                     showFlag: selectorConfig.showFlags,
                     useEmoji: selectorConfig.useEmoji,
                     leadingPadding: selectorConfig.leadingPadding,
                     trailingSpace: selectorConfig.trailingSpace,
                     textStyle: selectorTextStyle,
-                  ),
-                  value: country,
-                  items: mapCountryToDropdownItem(countries),
-                  onChanged: isEnabled ? onCountryChanged : null,
-                ),
-              )
-            : Item(
-                country: country,
-                showFlag: selectorConfig.showFlags,
-                useEmoji: selectorConfig.useEmoji,
-                leadingPadding: selectorConfig.leadingPadding,
-                trailingSpace: selectorConfig.trailingSpace,
-                textStyle: selectorTextStyle,
-              )
+                    trailingIcon: trailingIcon,
+                  )
+                : Item(
+                    country: country,
+                    showFlag: selectorConfig.showFlags,
+                    useEmoji: selectorConfig.useEmoji,
+                    leadingPadding: selectorConfig.leadingPadding,
+                    trailingSpace: selectorConfig.trailingSpace,
+                    textStyle: selectorTextStyle,
+                    trailingIcon: trailingIcon,
+                  )
         : MaterialButton(
             key: Key(TestHelper.DropdownButtonKeyValue),
             padding: EdgeInsets.zero,
@@ -91,15 +113,25 @@ class SelectorButton extends StatelessWidget {
                     }
                   }
                 : null,
-            child: Item(
-              country: country,
-              showFlag: selectorConfig.showFlags,
-              useEmoji: selectorConfig.useEmoji,
-              leadingPadding: selectorConfig.leadingPadding,
-              trailingSpace: selectorConfig.trailingSpace,
-              textStyle: selectorTextStyle,
-              trailingIcon: trailingIcon,
-            ),
+            child: selectorConfig.customBuilder != null
+                ? selectorConfig.customBuilder!(
+                    country: country,
+                    showFlag: selectorConfig.showFlags,
+                    useEmoji: selectorConfig.useEmoji,
+                    leadingPadding: selectorConfig.leadingPadding,
+                    trailingSpace: selectorConfig.trailingSpace,
+                    textStyle: selectorTextStyle,
+                    trailingIcon: trailingIcon,
+                  )
+                : Item(
+                    country: country,
+                    showFlag: selectorConfig.showFlags,
+                    useEmoji: selectorConfig.useEmoji,
+                    leadingPadding: selectorConfig.leadingPadding,
+                    trailingSpace: selectorConfig.trailingSpace,
+                    textStyle: selectorTextStyle,
+                    trailingIcon: trailingIcon,
+                  ),
           );
   }
 
@@ -109,15 +141,26 @@ class SelectorButton extends StatelessWidget {
     return countries.map((country) {
       return DropdownMenuItem<Country>(
         value: country,
-        child: Item(
-          key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
-          country: country,
-          showFlag: selectorConfig.showFlags,
-          useEmoji: selectorConfig.useEmoji,
-          textStyle: selectorTextStyle,
-          withCountryNames: false,
-          trailingSpace: selectorConfig.trailingSpace,
-        ),
+        child: selectorConfig.customBuilder != null
+            ? selectorConfig.customBuilder!(
+                key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
+                country: country,
+                showFlag: selectorConfig.showFlags,
+                useEmoji: selectorConfig.useEmoji,
+                leadingPadding: selectorConfig.leadingPadding,
+                trailingSpace: selectorConfig.trailingSpace,
+                textStyle: selectorTextStyle,
+                trailingIcon: trailingIcon,
+              )
+            : Item(
+                key: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
+                country: country,
+                showFlag: selectorConfig.showFlags,
+                useEmoji: selectorConfig.useEmoji,
+                textStyle: selectorTextStyle,
+                withCountryNames: false,
+                trailingSpace: selectorConfig.trailingSpace,
+              ),
       );
     }).toList();
   }
