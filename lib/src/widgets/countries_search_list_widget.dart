@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:intl_phone_number_input/src/models/country_model.dart';
 import 'package:intl_phone_number_input/src/utils/test/test_helper.dart';
 import 'package:intl_phone_number_input/src/utils/util.dart';
-import 'package:intl_phone_number_input/src/widgets/input_widget.dart';
 
 /// Creates a list of Countries with a search textfield.
 class CountrySearchListWidget extends StatefulWidget {
@@ -126,6 +124,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
     if (widget.countryTileBuilder != null) {
       return widget.countryTileBuilder!(
         tileKey: Key(TestHelper.countryItemKeyValue(country.alpha2Code)),
+        country: country,
         countryName: '${Utils.getCountryName(country, widget.locale)}',
         flag: (widget.showFlags!
             ? _Flag(country: country, useEmoji: widget.useEmoji!)

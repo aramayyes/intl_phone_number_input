@@ -40,6 +40,7 @@ enum PhoneInputSelectorType { DROPDOWN, BOTTOM_SHEET, DIALOG }
 /// [onTap] is a [VoidCallback] that is called when the list tile is tapped
 typedef CountryTileBuilder = Widget Function({
   required Key tileKey,
+  required Country country,
   required String countryName,
   Widget? flag,
   String? dialCode,
@@ -376,7 +377,7 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   String? validator(String? value) {
     bool isValid =
         this.isNotValid && (value!.isNotEmpty || widget.ignoreBlank == false);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (isValid && widget.errorMessage != null) {
         setState(() {
           this.selectorButtonBottomPadding =
