@@ -47,7 +47,19 @@ class SelectorConfig {
 
   final Widget? trailingIcon;
 
-  SelectorConfig({
+  SelectorConfig.nonConst({
+    this.customBuilder,
+    this.selectorType = PhoneInputSelectorType.DROPDOWN,
+    this.showFlags = true,
+    this.useEmoji = false,
+    this.countryComparator,
+    this.setSelectorButtonAsPrefixIcon = false,
+    this.leadingPadding,
+    this.trailingSpace = true,
+    this.trailingIcon,
+  });
+
+  const SelectorConfig({
     this.customBuilder,
     this.selectorType = PhoneInputSelectorType.DROPDOWN,
     this.showFlags = true,
