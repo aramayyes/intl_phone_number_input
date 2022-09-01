@@ -47,7 +47,7 @@ class SelectorConfig {
 
   final Widget? trailingIcon;
 
-  const SelectorConfig({
+  SelectorConfig({
     this.customBuilder,
     this.selectorType = PhoneInputSelectorType.DROPDOWN,
     this.showFlags = true,
